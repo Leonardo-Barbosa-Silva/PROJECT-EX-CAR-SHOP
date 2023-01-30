@@ -1,0 +1,179 @@
+(INICIO)
+
+- Primeiramente, o projeto foi iniciado com o comando "npx create-react-app ./", no qual é criado automaticamente uma estrutura de pastas convencional, bibliotecas e ferramentas como Webpack e Babel configurados, scrips úteis gravados no "package.json" e muitos outros...
+
+
+- No arquivo principal "index.js", é renderizado todos os componentes do projeto "injetando-os" na DOM da página web principal, na tag div de id "root" específicamente.
+
+
+- Englobando os components do projeto (todos os demais são childrens desse), temos o component "Provider" no qual é responsável por integrar a store criada via Redux aos components desenvolvidos com React.
+
+
+- Num menor nível, o component "BrowserRouter" engloba o component "App" (component principal do sistema de components da aplicação desenvolvida), provendo o gerenciamento de rotas de acordo com as URLs, renderizando components específicos quando acessadas.
+
+
+- A partir do component "App", é renderizado todos os demais components presentes na aplicação React, no qual o mesmo os renderizam.
+
+
+
+
+
+
+(REDUX)
+
+- Interno a pasta "store", temos o arquivo "configStore" onde é desenvolvido a lógica de criação da store Redux, usando o método "createStore", no qual é passado como argumento os respectivos reducers.
+
+
+- O método "createStore" é exportado para o "index.js" e passado como argumento para o "Provider" (componente responsável por integrar o Redux ao React), habilitando o acesso a store pelos components da aplicação.
+
+
+- Os reducers são desenvolvidos em arquivos de outras pastas, mas são exportados para o arquivo "configStore" onde são agrupados pelo método "combineReducers". A partir daí, como já mencionado, são passados como argumento para o método "createStore".
+
+
+- O reducer "carsReducer" é responsável por instanciar o estado inicial de carros "cars" (array de objetos com 'name' e 'url'), e é definido internamente á propriedade cars do objeto passado como argumento para o método "combineReducers" (centraliza os reducers).
+
+
+- As Actions Creators são definidas em outra pasta e respectivamente exportadas para arquivos que devem exercer funcionalidades na aplicação.
+
+
+
+
+
+
+
+(SISTEMA DE COMPONENTS)
+
+- No arquivo "index.js", é renderizado todos os components do projeto e da aplicação (App) como já mencionado anteriormente.
+
+- O component "App" retorna o component "Layout" e o passa como childrens os components "Message" e "Pages".
+
+- O component "Layout" retorna um "Header", depois passa seus childrens como childrens de "Content" e o component "Footer" por fim.
+
+- Vale ressaltar que o component "Message" só é renderizado quando a propriedade 'showAlert' do estado 'layout' for true.
+
+- Cada component irá rendizar uma parte da interface, sendo o component "Pages", responsável por retornar um sistema de rotas que irá renderizar components específicos: Add, Cart e List, de acordo com as URLs.
+
+- Quando acessada a rota '/list', é renderizado o component List ao qual é reponsável por retornar components "Card" dinamicamente a cada objeto interno ao array de "cars". Cada um dos objetos contém propriedades 'name' e 'url', no qual representam o nome do carro e o link de sua imagem.
+
+- Cada component "Card" retornado por "List" pelo método "map", recebe como argumento os próprios objetos de "cars". O retorno dos components "Card" são dinâmicos de acordo com os dados dos respectivos objetos, e assim, renderiza cards com nomes e imagens de diferentes carros, logicamente, como já mencionado, específicos de cada objeto enviado.
+
+
+
+
+
+
+
+(FUNCIONALIDADES)
+
+- O cadastro de novos carros é feito quando a URL '/add' é acessada e o component "Add" é renderizado. O component "Add" retorna um formulário com os campos 'name' e 'url'. Os campos possuem valor de acordo com os valores das propriedades 'name' e 'url' do objeto "form" criado préviamente utilizando o método "useState". A cada mudança nesses campos (inserção de letras), é acionado a função "onChangeForm" que por sua vez aciona o "setForm" que atualiza dinâmicamente o objeto "form" na respectiva propriedade e seu valor.
+
+- Relacionado a tag form que declara o formulário, é definido o evento "onSubmit" que aciona a função "onSubmit" quando o botão de submit é clicado. A função "onSubmit" por sua vez aciona o dispatch passando como parâmetro a Action Creator "addCar" que por sua vez recebe como parâmetro o objeto "form" (simboliza o carro a ser adicionado). A Action Creator "addCar" possui a propriedade type já definida, e adiciona o objeto "form" eviada em seu parâmetro na propriedade payload.
+
+- Portanto, no momento em que o botão submit é clicado, o método "onSubmit" da tag form é acionado, que por sua vez aciona a função "onSubmit", que por sua vez aciona "dispatch(addCar(form))". A Action Creator irá retornar a sua respectiva Action para os reducers da store Redux, no qual o determinado reducer irá identificá-la pelo seu type, retornando o estado "cars" atualizado dinamicamente pela adição do objeto "form" ao qual é encontrado no payload da Action.
+
+- No mesmo processo da funcão "onSubmit", é feito o dispatch da Action Creator "addedAlert" responsável por retornar uma Action que sinaliza ao respectivo reducer para retornar um novo estado atualizado com a propriedade 'showAlert' como true, fazendo com que o component "Message" (responsável pela mensagem de sucesso) seja renderizado na interface.
+
+- Por último, no mesmo processo, é realizado um dispatch da Action Creator "hideAddedAlert" responsável por retornar uma Action que sinaliza ao respectivo reducer para retornar um novo estado atualizado com a propriedade 'showAlert' como false, fazendo com que o component "Message" pare de ser renderizado na interface.
+
+
+
+
+
+
+!-----------------------(REDUX TOOLKIT)-----------------------!
+
+- A partir desse momento, foi realizado uma refatoração de Redux para a nova versão do Redux Toolkit. A nova versão permite fazer os mesmos processos mais facilmente, e utilizar de novas e mais robustas ferramentas.
+
+
+
+
+
+
+!-----------------------(MongoDB)-----------------------!
+
+- A partir desse momento, foi criado a parte backend do projeto em NodeJS que se comunica com o banco de dados NoSQL "MongoDB". Com isso, é possível buscar e inserir objetos que simbolizam os carros no banco de dados.
+
+
+
+
+
+
+(RENDERIZAÇÃO DE CARROS)
+
+- Agora, como as informações dos carros devem ser buscadas e também inseridas em um banco NoSQL, será necessário realizar chamadas assíncronas gerenciadas pelo próprio Redux, para que elas participem do processo descrito abaixo e atualizem os respectivos estados:
+
+
+(Evento >> dispatch: Middlewares (assíncronos) >> dispatch: Actions Creators >> Reducers >> Estados Atualizados >> Store)
+
+
+- Em "services/cars/api" é criado e exportado uma instância de requisição através do pacote axios, definindo uma URL base que será utilizada posteriormente em futuras requisições.
+
+
+- Em "fetchActions/index" é declarada e exportada a função "getAllCars" que quando acionada, retorna uma outra função responsável por fazer uma requisição GET na URL base já definida. Tal requisição, retorna um array de objetos no banco de dados que simbolizam os carros que já estão cadastrados e que devem ser exibidos inicialmente na interface.
+
+
+- O evento que aciona "getAllCars" é justamente o momento em que o component "List" é renderizado pela primeira e única vez na DOM página. Isso quer dizer que, quando a rota (URL) '/list' for acessada, o component "List" é renderizado na DOM da página, e através do método "useEffect, []", "getAllCars" é acionado via "dispatch" uma única vez, dando início a requisição assíncrona.
+
+
+- Assim que a requisição é concluída, ou seja, que backend desenvolvido se comunique com o banco de dados retornando os respectivos dados, é acionado a Action Creator "addCars" através do método "dispatch" (recebido como argumento pelo Redux assim que getAllCars é acionado via dispatch).
+
+
+- A Action Creator "addCars" é acionada através do "dispatch" recebendo o array de objetos retornado da requisição como argumento, e ao ser identificada pelo seu respectivo reducer, o mesmo irá atualizar totalmente o estado, retornando todo o array objetos para a store.
+
+
+- Quando o estado atualizado for retornado á store Redux, o método "useSelector" será responsável por buscar o respectivo estado, atribuindo o array de objetos (simbolizam os carros) a constante "cars". Assim, o component "List" é renderizado com as informações (conceito de reatividade) renderizando os carros com as respectivas informações através dos acionamentos do component "Car".
+
+
+
+
+
+
+
+(ADIÇÃO DE CARROS)
+
+- O processo de adição de carros e posteriormente a sua renderização na lista é também parecido. Quando o formulário é submetido, é acionado a função "setCar", através do método "dispatch", recebendo como argumento o objeto que simboliza o carro a ser cadastrado, dando início a operação assíncrona.
+
+
+- A função "setCar" retorna uma outra função responsável por fazer um POST na URL base, enviando o objeto recebido. O backend que foi desenvolvido, irá cadastrar esse novo carro (objeto) no banco de dados. Assim que a operação for concluída, será acionada a Action Creator "addCar" através do método "dispatch" (recebido como argumento pelo Redux assim que setCar é acionado via dispatch).
+
+
+- A Action Creator "addCar" será identificada pelo o seu respectivo reducer, que por sua vez irá atualizar o estado com a inserção do novo objeto (recebido por setCar e que representa o carro a ser cadastrado) o retornando para store Redux.
+
+
+- Em "List", sabemos existe o método "useSelector" responsável por buscar o estado de carros e atriui-lo a "cars" e, quando o mesmo for atualizado, "List" será re-renderizado com as novas informações (conceito de reatividade) re-renderizando os antigos e o novo carro.
+
+
+
+
+
+
+(CARRINHO)
+
+- Já sabemos que na rota (URL) '/list' é renderizado o component "List", sendo esse component, responsável por renderizar os carros cadastrados na loja usando o método "map" que aciona o component "Car", que é responsável por renderizar cada carro dinamicamente com os dados que lhe foi passado.
+
+
+- Em "List", é enviado a função "addItemsCart", responsável por acionar a Action Creator "addItemCart" pelo "dispatch", para cada component "Car" renderizado. Essa função passada como parâmetro para "Car", é declarada em cada um dos seus components internamente ao evento 'onClick' do botão de adição ao carrinho.
+
+
+- Portanto, quando o botão de adição ao carrinho for clicado, será acionado "addItemsCart" o passando como argumento o objeto que representa o carro renderizado. A função "addItemsCart" aciona o "dispatch" da Action Creator "addItemCart" também a passando como parâmetro o objeto, e assim, o respectivo reducer atualiza o estado inicialmente vazio.
+
+
+- No component "Cart" é buscado esse estado, e caso o mesmo não esteja vazio, é renderizado cada item(carro), que foi anteriormente adicionado ao carrinho, através do método "map" que aciona o component "itemCart" que é responsável por renderizar cada item(carro) dinamicamente com os dados que lhe foi passado.
+
+
+- No component "Header" também é buscado o estado e atualizado o número de itens no carrinho.
+
+
+- Em "Cart" também é enviado a função "removeItemsCart", responsável por acionar a Action Creator "removeItemCart" pelo "dispatch", para cada component "itemCart" renderizado. Essa função passada como parâmetro para "itemCart" é definida em cada um dos components internamente ao evento 'onClick' do botão de remoção do carrinho.
+
+
+- Portanto, quando o botão de remoção do carrinho for clicado, será acionado "removeItemsCart", o passando como argumento o id do objeto que representa o carro adicionado. O acionamento de "addItemsCart" realiza o "dispatch" da Action Creator "addItemCart" e o respectivo reducer atualiza o estado retornando todos os objetos (carros) do estado que representa o carrinho, menos o objeto que contém ID igual ao ID definido no payload da Action (id do objeto enviado anteriormente ao clicar no botão de remoção).
+
+
+- Assim, ao ser atualizado (retornado) o novo estado na store Redux, "Cart" e "Header" serão re-renderizados com os novos dados.
+
+
+
+
+
+(MESSAGES)

@@ -1,0 +1,20 @@
+{
+  "name": "car-shop-exercise-react-redux",
+  "version": "1.0.0",
+  "description": "Project Car Shop exercise",
+  "main": "index.js",
+  "author": "Leonardo Barbosa Silva",
+  "scripts": {
+    "app": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Leonardo-Barbosa-Silva/PROJECT-EX-CAR-SHOP.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Leonardo-Barbosa-Silva/PROJECT-EX-CAR-SHOP/issues"
+  },
+  "homepage": "https://github.com/Leonardo-Barbosa-Silva/PROJECT-EX-CAR-SHOP#readme"
+}
