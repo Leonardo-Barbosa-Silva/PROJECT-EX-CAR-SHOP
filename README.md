@@ -7,7 +7,7 @@ The project has two main pastes: backend and frontend.
 
 The paste called backend is the code that comunicate with database, manage routes, provide application's controllers for CRUD requests and autenticathion with JWT.
 
-The paste called frontend is the code that provides the applications's UI with React and Redux. The code is programmed by using the JSX sintax, but the template of React transpile fora a pure JavaScript code.
+The paste called frontend is the code that provides the applications's UI with React and Redux. The code is programmed by using the JSX sintax, but the template of React transpile for a a pure JavaScript code.
 
 
 ## PACKAGES & EXPLAINING
@@ -22,22 +22,16 @@ The paste called frontend is the code that provides the applications's UI with R
 
 - cors: for realize a cross-over port comunication.
 
--jsonwebtoken: for manage json-web-token in the application's authentication process.
+- jsonwebtoken: for manage json-web-token in the application's authentication process.
 
 
 (frontend)
-- react
+- react: provide reactive components for programming the application's UI.
 
-- react-dom
+- react-redux: provide the integration of React and Redux.
 
-- react-redux
+- @reduxjs/toolkit: provide extra funcionatilies from Redux for manage global states.
 
-- @reduxjs/toolkit
+- axios: for making requests through front and back end.
 
-- axios
-
-- npm-run-all
-
-- react-router-dom
-
-- redux
+- react-router-dom: for create React routes in a application.

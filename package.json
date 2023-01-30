@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "Project Car Shop exercise",
   "main": "index.js",
-  "author": "Leonardo Barbosa Silva",
   "scripts": {
-    "app": ""
+    "server": "npm run server-dev --prefix backend",
+    "front": "npm run start --prefix frontend",
+    "app": "npm-run-all --parallel server front"
   },
   "repository": {
     "type": "git",
@@ -16,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/Leonardo-Barbosa-Silva/PROJECT-EX-CAR-SHOP/issues"
   },
-  "homepage": "https://github.com/Leonardo-Barbosa-Silva/PROJECT-EX-CAR-SHOP#readme"
+  "homepage": "https://github.com/Leonardo-Barbosa-Silva/PROJECT-EX-CAR-SHOP#readme",
+  "dependencies": {
+    "npm-run-all": "4.1.5"
+  }
 }
