@@ -3,7 +3,7 @@ const { login } = require('../../controllers/users')
 
 
 
-router.post('/', login)
+router.post('/login', login)
 
 
 

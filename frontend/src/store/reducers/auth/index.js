@@ -1,7 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit";
 
 const INITIAL_STATE = {
-    isLogged: false
+    isLogged: localStorage.getItem('userToken') ? true : false
 }
 
 

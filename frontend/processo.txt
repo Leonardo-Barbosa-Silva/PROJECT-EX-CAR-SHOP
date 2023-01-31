@@ -176,4 +176,42 @@
 
 
 
-(MESSAGES)
+(MENSAGENS)
+
+- Para implementarmos a exibição de mensagens de sucesso após algum evento do usuário, foi criado um 'layoutReducer' que define um objeto inicial (estado) com a propriedade 'messages' (array) vazio. Esse reducer é responsável por adicionar respectivas mensagens, ou removê-las, dessa propriedade de acordo com o 'type' e o 'payload' da Action despachada.
+
+
+- Em "List" já sabemos que será renderizados os carros e que estes poderão ser adicionados ao carrinho. Assim, foi programado para ser realizado o "dispatch" da Action Creator responsável por sinalizar ao reducer 'layoutReducer' para que esse adicione a devida mensagem que fora passada no 'payload' dessa Action Creator: `${car.name} added in cart`.
+
+
+- Notemos que, ao serem adicionados vários carros e/ou varias vezes ao carrinho, será realizado o processo anterior para cada uma das adicões, e que em "Messages" será pego o devido estado das mensagens alimentado pelo reducer, renderizando assim as respectivas mensagens dinamincamente pelos acionamentos do component "Message".
+
+
+- Em "Message", foi programado uma função que acionará sempre que o component for renderizado, e assim foi definido um intevalo de poucos segundos para que seja acionada a Action Creator responsável por remover as respectivas mensagens do estado, dessa maneira, removendo-as também da interface em poucos segundos.
+
+
+- O mesmo processo foi feito para "Add" ao cadastrar novos carros.
+
+
+
+
+
+(ROTAS PRIVADAS & AUTORIZAÇÃO NO FRONTEND)
+
+
+- Primeiramente, vale ressaltar que essa é uma aplicação feita com React, em que os estados são gerenciados pelo Redux e as rotas pelo React Router DOM. Dessa maneira, para implementarmos autorização e rotas privadas no projeto, será necessário estabelecer a devida comunicação entre essas bibliotecas.
+
+
+- A implementação da rota privada foi realizada englobando o component "Add", ou seja, o component "Add" só deve ser renderizado na interface se o usuário estiver autorizado. Isso ocorre pois o component "PrivateRoute" é quem vai gerenciar a renderização de "Add" caso 'isLogged' seja true, ou será vai ser redirecionado para "List" caso seja false.
+
+
+- Para ser possível manipular e verificar o processo de autorização, foi criado o 'authReducer' com o estado inicial (objeto) que contém a propriedade 'isLogged' simbolizando o status de autorizado ou não do usuário (true ou false) com o seu valor dependente de já existir ou não um token armazenado no localStorage do browser.
+
+
+- Para input de dados do usuário, foi programado um component "Login" e declarado no sistemas de rotas da aplicação. Assim que for enviado os dados de usuário através desse formulário, será realizado um "dispatch" na função assíncrona "loginUser" já recebendo os dados que fará então uma requisição do tipo POST para URL de login gerenciada pelo backend da aplicação.
+
+
+- No backend, foi definido que se os dados enviados forem de um usuário válido, deve então ser retornado o seu devido token JWT. A partir disso, se a requisição mencionada anteriormente der certo, é armazenado o token retornado pelo backend no localStorage do browser, e feito o "dispacth" da Action Creator responsável por sinalizar ao reducer de atualizar o estado para 'isLogged' como true.
+
+
+- Com isso, dado que 'isLogged' seja true, o component "Add" poderá ser devidamente renderizado na interface caso o usuário acesse a sua rota (URL).
